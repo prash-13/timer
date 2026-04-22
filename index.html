@@ -18,301 +18,166 @@
     --muted2: #444444;
     --danger: #c96e6e;
   }
-
   * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Josefin Sans', sans-serif; letter-spacing: 0.04em; min-height: 100vh; }
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Josefin Sans', sans-serif;
-    letter-spacing: 0.04em;
-    min-height: 100vh;
-  }
-
-  /* ── NAV ── */
+  /* NAV */
   nav {
     position: fixed; top: 0; left: 0; right: 0; z-index: 100;
     display: flex; align-items: center; justify-content: space-between;
-    padding: 20px 48px;
-    border-bottom: 1px solid var(--border);
-    background: rgba(10,10,10,0.93);
-    backdrop-filter: blur(12px);
+    padding: 20px 48px; border-bottom: 1px solid var(--border);
+    background: rgba(10,10,10,0.93); backdrop-filter: blur(12px);
+    height: 62px;
   }
-  .nav-logo {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 18px; font-weight: 300;
-    letter-spacing: 0.15em; color: var(--gold);
-  }
+  .nav-logo { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 300; letter-spacing: 0.15em; color: var(--gold); }
   .nav-tabs { display: flex; gap: 2px; }
   .nav-tab {
     background: none; border: none; border-bottom: 1px solid transparent;
-    cursor: pointer; padding: 8px 20px;
-    font-family: 'Josefin Sans', sans-serif;
-    font-size: 10px; font-weight: 300;
-    letter-spacing: 0.18em; text-transform: uppercase;
-    color: #777777; transition: color 0.2s, border-color 0.2s;
-    margin-bottom: -1px;
+    cursor: pointer; padding: 8px 20px; font-family: 'Josefin Sans', sans-serif;
+    font-size: 10px; font-weight: 300; letter-spacing: 0.18em; text-transform: uppercase;
+    color: #777; transition: color 0.2s, border-color 0.2s; margin-bottom: -1px;
   }
   .nav-tab:hover { color: var(--text); }
   .nav-tab.active { color: var(--gold); border-bottom-color: var(--gold); }
-  .nav-total {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 14px; font-weight: 300;
-    color: var(--muted); font-style: italic; letter-spacing: 0.08em;
-  }
+  .nav-total { font-family: 'Cormorant Garamond', serif; font-size: 14px; font-weight: 300; color: var(--muted); font-style: italic; letter-spacing: 0.08em; }
   .nav-total span { color: var(--gold); }
 
-  /* ── PAGES ── */
+  /* PAGES */
   .page { display: none; }
-  .page.active { display: block; }
+  .page.active { display: flex; flex-direction: column; }
 
-  /* ── TIMER PAGE ── */
-  #page-timer {
-    min-height: 100vh;
-    display: flex; flex-direction: column;
+  /* TIMER PAGE — split layout */
+  #page-timer { flex-direction: row; min-height: 100vh; padding-top: 62px; }
+
+  .timer-left {
+    flex: 1; display: flex; flex-direction: column;
     align-items: center; justify-content: center;
-    padding-top: 80px;
     position: relative; overflow: hidden;
+    min-height: calc(100vh - 62px);
+    border-right: 1px solid var(--border);
   }
-  .ring {
-    position: absolute; border-radius: 50%;
-    border: 1px solid rgba(201,169,110,0.06);
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    pointer-events: none;
-  }
-  .ring:nth-child(1) { width: 600px; height: 600px; }
-  .ring:nth-child(2) { width: 750px; height: 750px; border-color: rgba(201,169,110,0.03); }
-  .ring:nth-child(3) { width: 900px; height: 900px; border-color: rgba(201,169,110,0.015); }
+  .ring { position: absolute; border-radius: 50%; border: 1px solid rgba(201,169,110,0.06); top: 50%; left: 50%; transform: translate(-50%,-50%); pointer-events: none; }
+  .ring:nth-child(1) { width: 500px; height: 500px; }
+  .ring:nth-child(2) { width: 650px; height: 650px; border-color: rgba(201,169,110,0.03); }
+  .ring:nth-child(3) { width: 800px; height: 800px; border-color: rgba(201,169,110,0.015); }
 
   @keyframes pulse-ring {
-    0%   { transform: translate(-50%,-50%) scale(1); opacity: 0.07; }
+    0% { transform: translate(-50%,-50%) scale(1); opacity: 0.07; }
     100% { transform: translate(-50%,-50%) scale(1.09); opacity: 0; }
   }
   #pulse-ring {
-    position: absolute; width: 600px; height: 600px; border-radius: 50%;
-    border: 1px solid var(--gold);
-    top: 50%; left: 50%;
-    transform: translate(-50%,-50%);
-    pointer-events: none; display: none;
+    position: absolute; width: 500px; height: 500px; border-radius: 50%;
+    border: 1px solid var(--gold); top: 50%; left: 50%;
+    transform: translate(-50%,-50%); pointer-events: none; display: none;
   }
   #pulse-ring.active { display: block; animation: pulse-ring 2.5s ease-out infinite; }
 
-  .timer-label {
-    font-size: 10px; font-weight: 300;
-    letter-spacing: 0.35em; text-transform: uppercase;
-    color: #999999; margin-bottom: 32px;
-    position: relative; z-index: 1;
-  }
-  #timer-display {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(72px, 14vw, 148px);
-    font-weight: 300; letter-spacing: -0.02em;
-    color: var(--text); line-height: 1;
-    margin-bottom: 16px; user-select: none;
-    transition: color 0.4s; position: relative; z-index: 1;
-  }
+  .timer-label { font-size: 10px; font-weight: 300; letter-spacing: 0.35em; text-transform: uppercase; color: #999; margin-bottom: 28px; position: relative; z-index: 1; }
+  #timer-display { font-family: 'Cormorant Garamond', serif; font-size: clamp(60px, 9vw, 128px); font-weight: 300; letter-spacing: -0.02em; color: var(--text); line-height: 1; margin-bottom: 14px; user-select: none; transition: color 0.4s; position: relative; z-index: 1; }
   #timer-display.running { color: var(--gold); }
-  .timer-sub {
-    font-size: 11px; font-weight: 300;
-    letter-spacing: 0.25em; color: #888888;
-    margin-bottom: 64px; font-style: italic;
-    position: relative; z-index: 1;
-  }
+  .timer-sub { font-size: 11px; font-weight: 300; letter-spacing: 0.25em; color: #888; margin-bottom: 52px; font-style: italic; position: relative; z-index: 1; }
 
-  .timer-controls {
-    display: flex; gap: 40px; align-items: center;
-    margin-bottom: 72px; position: relative; z-index: 1;
-  }
-
-  .btn-circle {
-    background: none; cursor: pointer; border-radius: 50%;
-    width: 80px; height: 80px;
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    transition: all 0.3s;
-  }
-  .btn-play {
-    border: 1px solid var(--gold-dim);
-  }
+  .timer-controls { display: flex; gap: 40px; align-items: center; margin-bottom: 52px; position: relative; z-index: 1; }
+  .btn-circle { background: none; cursor: pointer; border-radius: 50%; width: 80px; height: 80px; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: all 0.3s; }
+  .btn-play { border: 1px solid var(--gold-dim); }
   .btn-play:hover { border-color: var(--gold); background: rgba(201,169,110,0.06); }
   .btn-play svg { width: 28px; height: 28px; fill: var(--gold); }
-
-  .btn-save {
-    border: 1px solid var(--muted2);
-    gap: 3px;
-  }
+  .btn-save { border: 1px solid var(--muted2); gap: 3px; }
   .btn-save:hover { border-color: var(--gold-dim); background: rgba(201,169,110,0.04); }
-  .btn-save span {
-    font-family: 'Josefin Sans', sans-serif;
-    font-size: 8px; font-weight: 300;
-    letter-spacing: 0.18em; text-transform: uppercase;
-    color: #777777; line-height: 1; transition: color 0.2s;
-  }
+  .btn-save span { font-family: 'Josefin Sans', sans-serif; font-size: 8px; font-weight: 300; letter-spacing: 0.18em; text-transform: uppercase; color: #777; line-height: 1; transition: color 0.2s; }
   .btn-save:hover span { color: var(--gold); }
-
   .btn-spacer { width: 80px; height: 80px; }
 
-  .session-subject {
-    display: flex; flex-direction: column;
-    align-items: center; gap: 10px;
-    position: relative; z-index: 1;
-  }
-  .session-subject label {
-    font-size: 9px; letter-spacing: 0.3em;
-    text-transform: uppercase; color: var(--muted);
-  }
-  #session-input {
-    background: none; border: none;
-    border-bottom: 1px solid var(--border);
-    color: var(--text); font-family: 'Cormorant Garamond', serif;
-    font-size: 18px; font-weight: 300; font-style: italic;
-    text-align: center; padding: 6px 16px;
-    width: 280px; outline: none;
-    transition: border-color 0.2s; letter-spacing: 0.05em;
-  }
+  .session-subject { display: flex; flex-direction: column; align-items: center; gap: 10px; position: relative; z-index: 1; }
+  .session-subject label { font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--muted); }
+  #session-input { background: none; border: none; border-bottom: 1px solid var(--border); color: var(--text); font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 300; font-style: italic; text-align: center; padding: 6px 16px; width: 260px; outline: none; transition: border-color 0.2s; letter-spacing: 0.05em; }
   #session-input:focus { border-color: var(--gold-dim); }
   #session-input::placeholder { color: var(--muted); }
 
-  /* ── ANALYTICS / SESSIONS PAGES ── */
-  .inner-page {
-    padding: 100px 48px 60px;
-    max-width: 1200px; margin: 0 auto;
-  }
-  .page-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 36px; font-weight: 300; font-style: italic;
-    color: var(--text); margin-bottom: 8px;
-  }
-  .page-sub {
-    font-size: 10px; letter-spacing: 0.25em;
-    color: var(--muted); text-transform: uppercase; margin-bottom: 56px;
-  }
+  /* TODAY PANEL */
+  .today-panel { width: 360px; min-height: calc(100vh - 62px); display: flex; flex-direction: column; background: var(--surface); overflow-y: auto; }
+  .today-header { padding: 32px 32px 20px; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: var(--surface); z-index: 2; }
+  .today-title { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 300; font-style: italic; color: var(--text); margin-bottom: 4px; }
+  .today-date { font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; }
+  .today-total { display: flex; align-items: baseline; gap: 6px; }
+  .today-total-num { font-family: 'Cormorant Garamond', serif; font-size: 34px; font-weight: 300; color: var(--gold); line-height: 1; }
+  .today-total-label { font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); }
 
-  .stats-row {
-    display: grid; grid-template-columns: repeat(3,1fr);
-    gap: 1px; background: var(--border); margin-bottom: 48px;
-  }
+  .today-sessions { padding: 8px 0; flex: 1; }
+  .today-empty { padding: 36px 32px; font-family: 'Cormorant Garamond', serif; font-size: 16px; font-style: italic; color: var(--muted); line-height: 1.7; }
+  .today-row { padding: 14px 32px; border-bottom: 1px solid rgba(34,34,34,0.6); transition: background 0.15s; }
+  .today-row:hover { background: var(--surface2); }
+  .today-row-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 3px; }
+  .today-subj { font-size: 13px; letter-spacing: 0.06em; color: var(--text); }
+  .today-dur { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 300; color: var(--gold); }
+  .today-time-label { font-size: 9px; letter-spacing: 0.1em; color: var(--muted); }
+  .today-row.editing-row { background: #171410; }
+  .today-subj-input { background: none; border: none; border-bottom: 1px solid var(--gold-dim); color: var(--text); font-family: 'Josefin Sans', sans-serif; font-size: 13px; letter-spacing: 0.06em; outline: none; width: 160px; padding: 1px 0; }
+  .today-actions { display: flex; gap: 6px; margin-top: 6px; }
+  .t-btn { background: none; border: none; cursor: pointer; font-family: 'Josefin Sans', sans-serif; font-size: 8px; letter-spacing: 0.18em; text-transform: uppercase; padding: 3px 6px; transition: color 0.2s; }
+  .t-btn.edit { color: var(--muted2); } .t-btn.edit:hover { color: var(--gold); }
+  .t-btn.save-t { color: var(--gold); }
+  .t-btn.del { color: var(--muted2); } .t-btn.del:hover { color: var(--danger); }
+
+  /* ANALYTICS / SESSIONS */
+  #page-analytics, #page-sessions { display: none; }
+  #page-analytics.active, #page-sessions.active { display: block; }
+  .inner-page { padding: 100px 48px 60px; max-width: 1200px; margin: 0 auto; }
+  .page-title { font-family: 'Cormorant Garamond', serif; font-size: 36px; font-weight: 300; font-style: italic; color: var(--text); margin-bottom: 8px; }
+  .page-sub { font-size: 10px; letter-spacing: 0.25em; color: var(--muted); text-transform: uppercase; margin-bottom: 56px; }
+
+  .stats-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(--border); margin-bottom: 48px; }
   .stat-card { background: var(--surface); padding: 28px 32px; }
-  .stat-card .s-label {
-    font-size: 9px; letter-spacing: 0.28em;
-    text-transform: uppercase; color: var(--muted); margin-bottom: 10px;
-  }
-  .stat-card .s-val {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 38px; font-weight: 300; color: var(--gold); line-height: 1;
-  }
+  .stat-card .s-label { font-size: 9px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+  .stat-card .s-val { font-family: 'Cormorant Garamond', serif; font-size: 38px; font-weight: 300; color: var(--gold); line-height: 1; }
   .stat-card .s-unit { font-size: 11px; color: var(--muted); margin-left: 4px; }
 
-  .chart-tabs {
-    display: flex; border-bottom: 1px solid var(--border); margin-bottom: 24px;
-  }
-  .chart-tab {
-    background: none; border: none; border-bottom: 1px solid transparent;
-    cursor: pointer; padding: 10px 24px; margin-bottom: -1px;
-    font-family: 'Josefin Sans', sans-serif;
-    font-size: 9px; font-weight: 300;
-    letter-spacing: 0.22em; text-transform: uppercase;
-    color: var(--muted); transition: color 0.2s;
-  }
+  .chart-tabs { display: flex; border-bottom: 1px solid var(--border); margin-bottom: 24px; }
+  .chart-tab { background: none; border: none; border-bottom: 1px solid transparent; cursor: pointer; padding: 10px 24px; margin-bottom: -1px; font-family: 'Josefin Sans', sans-serif; font-size: 9px; font-weight: 300; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); transition: color 0.2s; }
   .chart-tab:hover { color: var(--text); }
   .chart-tab.active { color: var(--gold); border-bottom-color: var(--gold); }
-
-  .chart-container {
-    background: var(--surface); border: 1px solid var(--border);
-    padding: 32px; margin-bottom: 48px;
-  }
-  .chart-wrap { width: 100%; height: 200px; }
-  .chart-wrap svg { width: 100%; height: 100%; }
-  .chart-empty {
-    text-align: center; color: var(--muted);
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 18px; font-style: italic;
-    padding: 60px 0; letter-spacing: 0.08em;
-  }
+  .chart-container { background: var(--surface); border: 1px solid var(--border); padding: 28px 24px 16px; margin-bottom: 48px; }
+  .chart-wrap { width: 100%; }
+  .chart-empty { text-align: center; color: var(--muted); font-family: 'Cormorant Garamond', serif; font-size: 18px; font-style: italic; padding: 60px 0; letter-spacing: 0.08em; }
 
   .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-
-  .section-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 22px; font-weight: 300; font-style: italic;
-    color: var(--text); margin-bottom: 4px;
-  }
-  .section-sub {
-    font-size: 9px; letter-spacing: 0.22em;
-    text-transform: uppercase; color: var(--muted); margin-bottom: 24px;
-  }
+  .section-title { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 300; font-style: italic; color: var(--text); margin-bottom: 4px; }
+  .section-sub { font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); margin-bottom: 24px; }
 
   .sessions-list { display: flex; flex-direction: column; gap: 1px; background: var(--border); }
-
-  .session-row {
-    background: var(--surface); padding: 18px 28px;
-    display: grid; grid-template-columns: 130px 1fr 90px 100px;
-    align-items: center; gap: 16px;
-    transition: background 0.15s;
-  }
+  .session-row { background: var(--surface); padding: 16px 24px; display: grid; grid-template-columns: 130px 1fr 90px 100px; align-items: center; gap: 12px; transition: background 0.15s; }
   .session-row:hover { background: var(--surface2); }
   .session-row.editing { background: #171410; }
-
   .s-date { font-size: 10px; letter-spacing: 0.1em; color: var(--muted); line-height: 1.6; }
-  .s-dur {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 20px; font-weight: 300; color: var(--gold); text-align: right;
-  }
+  .s-dur { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 300; color: var(--gold); text-align: right; }
   .s-subject { font-size: 13px; letter-spacing: 0.06em; color: var(--text); }
-  .s-subject-input {
-    background: none; border: none; border-bottom: 1px solid var(--gold-dim);
-    color: var(--text); font-family: 'Josefin Sans', sans-serif;
-    font-size: 13px; letter-spacing: 0.06em;
-    outline: none; width: 100%; padding: 2px 0;
-  }
+  .s-subject-input { background: none; border: none; border-bottom: 1px solid var(--gold-dim); color: var(--text); font-family: 'Josefin Sans', sans-serif; font-size: 13px; letter-spacing: 0.06em; outline: none; width: 100%; padding: 2px 0; }
   .s-actions { display: flex; gap: 8px; justify-content: flex-end; }
-  .s-btn {
-    background: none; border: none; cursor: pointer;
-    font-family: 'Josefin Sans', sans-serif;
-    font-size: 9px; letter-spacing: 0.18em;
-    text-transform: uppercase; padding: 4px 8px; transition: color 0.2s;
-  }
-  .s-btn.edit { color: var(--muted); }
-  .s-btn.edit:hover { color: var(--gold); }
+  .s-btn { background: none; border: none; cursor: pointer; font-family: 'Josefin Sans', sans-serif; font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; padding: 4px 8px; transition: color 0.2s; }
+  .s-btn.edit { color: var(--muted); } .s-btn.edit:hover { color: var(--gold); }
   .s-btn.save-edit { color: var(--gold); }
-  .s-btn.del { color: var(--muted2); }
-  .s-btn.del:hover { color: var(--danger); }
+  .s-btn.del { color: var(--muted2); } .s-btn.del:hover { color: var(--danger); }
+  .no-sessions { text-align: center; padding: 60px; font-family: 'Cormorant Garamond', serif; font-size: 18px; font-style: italic; color: var(--muted); background: var(--surface); }
 
-  .no-sessions {
-    text-align: center; padding: 60px;
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 18px; font-style: italic;
-    color: var(--muted); background: var(--surface);
-  }
-
-  .export-row {
-    display: flex; gap: 12px; margin-bottom: 32px;
-  }
-  .export-btn {
-    background: none; border: 1px solid var(--border); cursor: pointer;
-    padding: 10px 20px;
-    font-family: 'Josefin Sans', sans-serif;
-    font-size: 9px; font-weight: 300;
-    letter-spacing: 0.2em; text-transform: uppercase;
-    color: var(--muted); transition: all 0.2s;
-  }
+  .export-row { display: flex; gap: 12px; margin-bottom: 32px; }
+  .export-btn { background: none; border: 1px solid var(--border); cursor: pointer; padding: 10px 20px; font-family: 'Josefin Sans', sans-serif; font-size: 9px; font-weight: 300; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); transition: all 0.2s; }
   .export-btn:hover { border-color: var(--gold-dim); color: var(--gold); }
 
-  @media (max-width: 700px) {
+  @media (max-width: 900px) {
+    #page-timer { flex-direction: column; }
+    .today-panel { width: 100%; min-height: auto; border-right: none; border-top: 1px solid var(--border); }
+    .timer-left { min-height: 70vh; border-right: none; }
     nav { padding: 16px 20px; }
     .inner-page { padding: 90px 20px 40px; }
-    .stats-row { grid-template-columns: 1fr; }
-    .two-col { grid-template-columns: 1fr; }
+    .stats-row, .two-col { grid-template-columns: 1fr; }
     .session-row { grid-template-columns: 1fr 1fr; }
     .s-actions { grid-column: span 2; }
-    #timer-display { font-size: 18vw; }
+    #timer-display { font-size: 16vw; }
   }
 </style>
 </head>
 <body>
 
-<!-- NAV -->
 <nav>
   <div class="nav-logo">studium</div>
   <div class="nav-tabs">
@@ -323,66 +188,62 @@
   <div class="nav-total">Total: <span id="nav-total">0h 0m</span></div>
 </nav>
 
-<!-- TIMER PAGE -->
+<!-- ═══ TIMER PAGE ═══ -->
 <div id="page-timer" class="page active">
-  <div class="ring"></div>
-  <div class="ring"></div>
-  <div class="ring"></div>
-  <div id="pulse-ring"></div>
-
-  <div class="timer-label" id="timer-label">ready to study</div>
-  <div id="timer-display">00:00:00</div>
-  <div class="timer-sub" id="timer-sub">today · 0h 0m</div>
-
-  <div class="timer-controls">
-    <button class="btn-circle btn-save" onclick="saveProgress()" title="Save session">
-      <span>save</span>
-      <span>progress</span>
-    </button>
-
-    <button class="btn-circle btn-play" id="btn-play" onclick="togglePlay()">
-      <svg id="play-icon" viewBox="0 0 24 24"><path d="M6 4l14 8-14 8V4z"/></svg>
-    </button>
-
-    <div class="btn-spacer"></div>
+  <div class="timer-left">
+    <div class="ring"></div><div class="ring"></div><div class="ring"></div>
+    <div id="pulse-ring"></div>
+    <div class="timer-label" id="timer-label">ready to study</div>
+    <div id="timer-display">00:00:00</div>
+    <div class="timer-sub" id="timer-sub">today · 0h 0m</div>
+    <div class="timer-controls">
+      <button class="btn-circle btn-save" onclick="saveProgress()">
+        <span>save</span><span>progress</span>
+      </button>
+      <button class="btn-circle btn-play" onclick="togglePlay()">
+        <svg id="play-icon" viewBox="0 0 24 24"><path d="M6 4l14 8-14 8V4z"/></svg>
+      </button>
+      <div class="btn-spacer"></div>
+    </div>
+    <div class="session-subject">
+      <label>what are you studying?</label>
+      <input id="session-input" type="text" placeholder="e.g. Calculus, Biology..." />
+    </div>
   </div>
 
-  <div class="session-subject">
-    <label>what are you studying?</label>
-    <input id="session-input" type="text" placeholder="e.g. Calculus, Biology..." />
+  <div class="today-panel">
+    <div class="today-header">
+      <div class="today-title">Today</div>
+      <div class="today-date" id="today-date">—</div>
+      <div class="today-total">
+        <div class="today-total-num" id="today-total-num">0h 0m</div>
+        <div class="today-total-label">studied today</div>
+      </div>
+    </div>
+    <div class="today-sessions" id="today-sessions">
+      <div class="today-empty">No sessions yet today.<br>Start the timer to begin.</div>
+    </div>
   </div>
 </div>
 
-<!-- ANALYTICS PAGE -->
+<!-- ═══ ANALYTICS PAGE ═══ -->
 <div id="page-analytics" class="page">
   <div class="inner-page">
     <div class="page-title">Your Progress</div>
     <div class="page-sub">study analytics overview</div>
-
     <div class="stats-row">
-      <div class="stat-card">
-        <div class="s-label">Today</div>
-        <div class="s-val" id="stat-today">0<span class="s-unit">h</span> 0<span class="s-unit">m</span></div>
-      </div>
-      <div class="stat-card">
-        <div class="s-label">This Week</div>
-        <div class="s-val" id="stat-week">0<span class="s-unit">h</span> 0<span class="s-unit">m</span></div>
-      </div>
-      <div class="stat-card">
-        <div class="s-label">All Time</div>
-        <div class="s-val" id="stat-total">0<span class="s-unit">h</span> 0<span class="s-unit">m</span></div>
-      </div>
+      <div class="stat-card"><div class="s-label">Today</div><div class="s-val" id="stat-today">0<span class="s-unit">h</span> 0<span class="s-unit">m</span></div></div>
+      <div class="stat-card"><div class="s-label">This Week</div><div class="s-val" id="stat-week">0<span class="s-unit">h</span> 0<span class="s-unit">m</span></div></div>
+      <div class="stat-card"><div class="s-label">All Time</div><div class="s-val" id="stat-total">0<span class="s-unit">h</span> 0<span class="s-unit">m</span></div></div>
     </div>
-
     <div class="chart-tabs">
-      <button class="chart-tab active" onclick="setRange('day')">Day</button>
-      <button class="chart-tab" onclick="setRange('week')">Week</button>
-      <button class="chart-tab" onclick="setRange('month')">Month</button>
+      <button class="chart-tab active" onclick="setRange('week',this)">Week</button>
+      <button class="chart-tab" onclick="setRange('month',this)">Month</button>
+      <button class="chart-tab" onclick="setRange('alltime',this)">All Time</button>
     </div>
     <div class="chart-container">
       <div class="chart-wrap" id="chart-wrap"></div>
     </div>
-
     <div class="two-col">
       <div>
         <div class="section-title">Recent Activity</div>
@@ -398,354 +259,357 @@
   </div>
 </div>
 
-<!-- SESSIONS PAGE -->
+<!-- ═══ SESSIONS PAGE ═══ -->
 <div id="page-sessions" class="page">
   <div class="inner-page">
     <div class="page-title">All Sessions</div>
     <div class="page-sub" id="sessions-sub">0 sessions recorded</div>
-
     <div class="export-row">
       <button class="export-btn" onclick="exportData()">Export JSON</button>
       <button class="export-btn" onclick="document.getElementById('import-input').click()">Import JSON</button>
       <input type="file" id="import-input" accept=".json" style="display:none" onchange="importData(event)" />
     </div>
-
     <div id="sessions-list" class="sessions-list"></div>
   </div>
 </div>
 
 <script>
-  // ── STATE ──
-  const STORAGE_KEY = 'studium_sessions_v1';
-  let sessions = [];
-  let running = false;
-  let elapsed = 0;
-  let sessionStart = null;
-  let intervalId = null;
-  let chartRange = 'week';
+// ── STATE ──
+const SK = 'studium_v3';
+let sessions = [];
+let running = false, elapsed = 0, sessionStart = null, intervalId = null, chartRange = 'week';
 
-  // ── PERSISTENCE ──
-  function loadSessions() {
-    try { sessions = JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }
-    catch { sessions = []; }
-  }
-  function saveSessions() {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(sessions));
-  }
+function load() { try { sessions = JSON.parse(localStorage.getItem(SK)) || []; } catch { sessions = []; } }
+function save() { localStorage.setItem(SK, JSON.stringify(sessions)); }
 
-  // ── FORMATTING ──
-  function fmt(s) {
-    const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), sec = s % 60;
-    return `${pad(h)}:${pad(m)}:${pad(sec)}`;
-  }
-  function pad(n) { return String(n).padStart(2, '0'); }
-  function fmtHM(s) {
-    const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60);
-    if (h === 0) return `${m}m`;
-    if (m === 0) return `${h}h`;
-    return `${h}h ${m}m`;
-  }
-  function fmtDate(ts) {
-    return new Date(ts).toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
-  }
-  function fmtTime(ts) {
-    return new Date(ts).toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit' });
-  }
-  function dateKey(ts) {
-    const d = new Date(ts);
-    return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
-  }
-  function statVal(secs) {
-    const h = Math.floor(secs / 3600), m = Math.floor((secs % 3600) / 60);
-    return `${h}<span class="s-unit">h</span> ${m}<span class="s-unit">m</span>`;
-  }
+// ── FORMAT ──
+function pad(n) { return String(n).padStart(2,'0'); }
+function fmt(s) { return `${pad(Math.floor(s/3600))}:${pad(Math.floor((s%3600)/60))}:${pad(s%60)}`; }
+function fmtHM(s) {
+  const h=Math.floor(s/3600), m=Math.floor((s%3600)/60);
+  if(h===0) return `${m}m`; if(m===0) return `${h}h`; return `${h}h ${m}m`;
+}
+function fmtDate(ts) { return new Date(ts).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}); }
+function fmtTime(ts) { return new Date(ts).toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}); }
+function dateKey(ts) { const d=new Date(ts); return `${d.getFullYear()}-${pad(d.getMonth())}-${pad(d.getDate())}`; }
+function todayKey() { return dateKey(Date.now()); }
+function statVal(s) { const h=Math.floor(s/3600),m=Math.floor((s%3600)/60); return `${h}<span class="s-unit">h</span> ${m}<span class="s-unit">m</span>`; }
 
-  // ── TIMER ──
-  function togglePlay() {
-    if (!running) {
-      if (elapsed === 0) sessionStart = Date.now();
-      else sessionStart = Date.now() - elapsed * 1000;
-      running = true;
-      intervalId = setInterval(() => {
-        elapsed = Math.floor((Date.now() - sessionStart) / 1000);
-        updateTimerUI();
-      }, 500);
-    } else {
-      running = false;
-      clearInterval(intervalId);
-    }
-    updateTimerUI();
-  }
-
-  function saveProgress() {
-    if (elapsed < 5) { running = false; clearInterval(intervalId); elapsed = 0; updateTimerUI(); return; }
-    running = false;
-    clearInterval(intervalId);
-    const subj = document.getElementById('session-input').value.trim() || 'Study Session';
-    sessions.unshift({
-      id: Date.now(),
-      start: sessionStart || Date.now() - elapsed * 1000,
-      duration: elapsed,
-      subject: subj
-    });
-    saveSessions();
-    elapsed = 0;
-    sessionStart = null;
-    document.getElementById('session-input').value = '';
-    updateTimerUI();
-    updateAll();
-  }
-
-  function updateTimerUI() {
-    const disp = document.getElementById('timer-display');
-    const label = document.getElementById('timer-label');
-    const sub = document.getElementById('timer-sub');
-    const playIcon = document.getElementById('play-icon');
-    const pulse = document.getElementById('pulse-ring');
-
-    disp.textContent = fmt(elapsed);
-    disp.className = running ? 'running' : '';
-    pulse.className = running ? 'active' : '';
-
-    if (running) label.textContent = 'session in progress';
-    else if (elapsed > 0) label.textContent = 'session paused';
-    else label.textContent = 'ready to study';
-
-    const todayS = sessions.filter(s => dateKey(s.start) === dateKey(Date.now())).reduce((a,s)=>a+s.duration,0);
-    const live = running || elapsed > 0 ? elapsed : 0;
-    sub.textContent = `today · ${fmtHM(todayS + (running ? live : 0))}`;
-
-    if (running) {
-      playIcon.innerHTML = '<rect x="5" y="4" width="4" height="16" rx="1"/><rect x="15" y="4" width="4" height="16" rx="1"/>';
-    } else {
-      playIcon.innerHTML = '<path d="M6 4l14 8-14 8V4z"/>';
-    }
-  }
-
-  // ── ANALYTICS ──
-  function updateStats() {
-    const now = Date.now();
-    const todayS = sessions.filter(s => dateKey(s.start) === dateKey(now)).reduce((a,s)=>a+s.duration,0);
-    const weekS = sessions.filter(s => now - s.start < 7*86400000).reduce((a,s)=>a+s.duration,0);
-    const totalS = sessions.reduce((a,s)=>a+s.duration,0);
-
-    document.getElementById('stat-today').innerHTML = statVal(todayS);
-    document.getElementById('stat-week').innerHTML = statVal(weekS);
-    document.getElementById('stat-total').innerHTML = statVal(totalS);
-    document.getElementById('nav-total').textContent = fmtHM(totalS);
-  }
-
-  function setRange(r) {
-    chartRange = r;
-    document.querySelectorAll('.chart-tab').forEach(t => t.classList.remove('active'));
-    event.target.classList.add('active');
-    renderChart();
-  }
-
-  function renderChart() {
-    const wrap = document.getElementById('chart-wrap');
-    if (sessions.length === 0) {
-      wrap.innerHTML = '<div class="chart-empty">No sessions recorded yet</div>';
-      return;
-    }
-
-    const now = new Date();
-    let buckets = [];
-
-    if (chartRange === 'day') {
-      buckets = Array.from({length:24}, (_,i) => {
-        const h = (now.getHours() - 23 + i + 24) % 24;
-        const lbl = h === 0 ? '12a' : h < 12 ? `${h}a` : h === 12 ? '12p' : `${h-12}p`;
-        return { label: lbl, secs: 0 };
-      });
-      const cutoff = Date.now() - 24*3600*1000;
-      sessions.filter(s => s.start >= cutoff).forEach(s => {
-        const h = new Date(s.start).getHours();
-        const idx = (h - now.getHours() + 23 + 24) % 24;
-        if (idx >= 0 && idx < 24) buckets[idx].secs += s.duration;
-      });
-    } else if (chartRange === 'week') {
-      buckets = Array.from({length:7}, (_,i) => {
-        const d = new Date(now); d.setDate(d.getDate() - 6 + i);
-        return { label: d.toLocaleDateString('en-US',{weekday:'short'}).toUpperCase(), secs: 0 };
-      });
-      sessions.forEach(s => {
-        const diff = Math.floor((now - s.start) / 86400000);
-        if (diff >= 0 && diff < 7) buckets[6 - diff].secs += s.duration;
-      });
-    } else {
-      buckets = Array.from({length:6}, (_,i) => {
-        const d = new Date(now); d.setDate(d.getDate() - 29 + i*5);
-        return { label: d.toLocaleDateString('en-US',{month:'short',day:'numeric'}), secs: 0 };
-      });
-      sessions.forEach(s => {
-        const diff = Math.floor((now - s.start) / 86400000);
-        if (diff >= 0 && diff < 30) {
-          const idx = Math.min(5, Math.floor((29 - diff) / 5));
-          buckets[idx].secs += s.duration;
-        }
-      });
-    }
-
-    const maxS = Math.max(...buckets.map(b=>b.secs), 1);
-    const W = 800, H = 160, padT = 10, padB = 28;
-    const gap = W / buckets.length;
-    const bw = gap * 0.55;
-
-    let bars = '';
-    let labels = '';
-    let lines = '';
-
-    [0.25, 0.5, 0.75, 1].forEach(f => {
-      const y = padT + (1 - f) * H;
-      lines += `<line x1="0" y1="${y}" x2="${W}" y2="${y}" stroke="#222" stroke-width="1"/>`;
-    });
-
-    buckets.forEach((b, i) => {
-      const bh = (b.secs / maxS) * H;
-      const x = i * gap + gap / 2 - bw / 2;
-      const y = padT + H - bh;
-      const cx = i * gap + gap / 2;
-      bars += `<rect x="${x}" y="${y}" width="${bw}" height="${bh}" rx="2" fill="#8a6e3e" class="chart-bar">
-        <title>${b.label}: ${fmtHM(b.secs)}</title>
-      </rect>`;
-      labels += `<text x="${cx}" y="${H + padT + 18}" text-anchor="middle" fill="#888" font-family="'Josefin Sans',sans-serif" font-size="9" letter-spacing="1">${b.label}</text>`;
-    });
-
-    wrap.innerHTML = `<svg viewBox="0 0 ${W} ${H + padB}" preserveAspectRatio="none" style="width:100%;height:100%">
-      ${lines}${bars}${labels}
-    </svg>`;
-
-    // hover effect
-    wrap.querySelectorAll('.chart-bar').forEach(bar => {
-      bar.addEventListener('mouseenter', () => bar.setAttribute('fill','#c9a96e'));
-      bar.addEventListener('mouseleave', () => bar.setAttribute('fill','#8a6e3e'));
-    });
-  }
-
-  function renderRecent() {
-    const el = document.getElementById('recent-list');
-    const top5 = sessions.slice(0, 5);
-    if (!top5.length) { el.innerHTML = '<div class="no-sessions">No sessions yet</div>'; return; }
-    el.innerHTML = top5.map(s => `
-      <div class="session-row">
-        <div class="s-date">${fmtDate(s.start)}<br><span style="font-size:9px;opacity:.6">${fmtTime(s.start)}</span></div>
-        <div class="s-subject">${s.subject}</div>
-        <div class="s-dur">${fmtHM(s.duration)}</div>
-        <div></div>
-      </div>`).join('');
-  }
-
-  function renderTopSubjects() {
-    const el = document.getElementById('top-subjects');
-    const map = {};
-    sessions.forEach(s => { map[s.subject] = (map[s.subject]||0) + s.duration; });
-    const top = Object.entries(map).sort((a,b)=>b[1]-a[1]).slice(0,5);
-    if (!top.length) { el.innerHTML = '<div class="no-sessions">No sessions yet</div>'; return; }
-    el.innerHTML = top.map(([subj, secs]) => `
-      <div class="session-row">
-        <div class="s-subject" style="grid-column:span 2">${subj}</div>
-        <div class="s-dur">${fmtHM(secs)}</div>
-        <div></div>
-      </div>`).join('');
-  }
-
-  function renderSessionsList() {
-    const el = document.getElementById('sessions-list');
-    const sub = document.getElementById('sessions-sub');
-    sub.textContent = `${sessions.length} session${sessions.length !== 1 ? 's' : ''} recorded — click edit to annotate`;
-    if (!sessions.length) { el.innerHTML = '<div class="no-sessions">No sessions recorded yet.<br>Start the timer to begin tracking.</div>'; return; }
-    el.innerHTML = sessions.map(s => `
-      <div class="session-row" id="row-${s.id}">
-        <div class="s-date">${fmtDate(s.start)}<br><span style="font-size:9px;opacity:.6">${fmtTime(s.start)}</span></div>
-        <div class="s-subject" id="subj-${s.id}">${s.subject}</div>
-        <div class="s-dur">${fmtHM(s.duration)}</div>
-        <div class="s-actions">
-          <button class="s-btn edit" onclick="startEdit(${s.id})">Edit</button>
-          <button class="s-btn del" onclick="deleteSession(${s.id})">✕</button>
-        </div>
-      </div>`).join('');
-  }
-
-  function startEdit(id) {
-    const s = sessions.find(x => x.id === id);
-    if (!s) return;
-    const row = document.getElementById(`row-${id}`);
-    const subjEl = document.getElementById(`subj-${id}`);
-    row.classList.add('editing');
-    subjEl.innerHTML = `<input class="s-subject-input" id="edit-input-${id}" value="${s.subject}" onkeydown="if(event.key==='Enter')saveEdit(${id})" />`;
-    document.getElementById(`edit-input-${id}`).focus();
-    row.querySelector('.s-btn.edit').textContent = 'Save';
-    row.querySelector('.s-btn.edit').className = 's-btn save-edit';
-    row.querySelector('.s-btn.save-edit').setAttribute('onclick', `saveEdit(${id})`);
-  }
-
-  function saveEdit(id) {
-    const input = document.getElementById(`edit-input-${id}`);
-    const val = input ? input.value.trim() : '';
-    const idx = sessions.findIndex(x => x.id === id);
-    if (idx !== -1 && val) sessions[idx].subject = val;
-    saveSessions();
-    renderSessionsList();
-  }
-
-  function deleteSession(id) {
-    sessions = sessions.filter(x => x.id !== id);
-    saveSessions();
-    updateAll();
-  }
-
-  // ── EXPORT / IMPORT ──
-  function exportData() {
-    const blob = new Blob([JSON.stringify(sessions, null, 2)], {type:'application/json'});
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = 'studium-backup.json';
-    a.click();
-  }
-  function importData(e) {
-    const file = e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = ev => {
-      try {
-        const imported = JSON.parse(ev.target.result);
-        if (Array.isArray(imported)) {
-          sessions = imported;
-          saveSessions();
-          updateAll();
-          alert(`Imported ${imported.length} sessions.`);
-        }
-      } catch { alert('Invalid file.'); }
-    };
-    reader.readAsText(file);
-    e.target.value = '';
-  }
-
-  // ── PAGE SWITCHING ──
-  function showPage(name) {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-    document.getElementById(`page-${name}`).classList.add('active');
-    document.querySelectorAll('.nav-tab').forEach(t => {
-      if (t.textContent.toLowerCase() === name) t.classList.add('active');
-    });
-    if (name === 'analytics') { updateStats(); renderChart(); renderRecent(); renderTopSubjects(); }
-    if (name === 'sessions') renderSessionsList();
-  }
-
-  function updateAll() {
-    updateStats();
-    renderChart();
-    renderRecent();
-    renderTopSubjects();
-    renderSessionsList();
-  }
-
-  // ── INIT ──
-  loadSessions();
+// ── TIMER ──
+function togglePlay() {
+  if (!running) {
+    sessionStart = elapsed===0 ? Date.now() : Date.now()-elapsed*1000;
+    running = true;
+    intervalId = setInterval(()=>{ elapsed=Math.floor((Date.now()-sessionStart)/1000); updateTimerUI(); },500);
+  } else { running=false; clearInterval(intervalId); }
   updateTimerUI();
-  updateStats();
+}
+
+function saveProgress() {
+  if (elapsed<5) { running=false; clearInterval(intervalId); elapsed=0; updateTimerUI(); return; }
+  running=false; clearInterval(intervalId);
+  const subj = document.getElementById('session-input').value.trim() || 'Study Session';
+  sessions.unshift({ id:Date.now(), start:sessionStart||Date.now()-elapsed*1000, duration:elapsed, subject:subj });
+  save(); elapsed=0; sessionStart=null;
+  document.getElementById('session-input').value='';
+  updateTimerUI(); renderTodayPanel(); updateStats();
+}
+
+function updateTimerUI() {
+  document.getElementById('timer-display').textContent = fmt(elapsed);
+  document.getElementById('timer-display').className = running?'running':'';
+  document.getElementById('pulse-ring').className = running?'active':'';
+  document.getElementById('timer-label').textContent = running?'session in progress':elapsed>0?'session paused':'ready to study';
+  const ts = sessions.filter(s=>dateKey(s.start)===todayKey()).reduce((a,s)=>a+s.duration,0);
+  document.getElementById('timer-sub').textContent = `today · ${fmtHM(ts+(running?elapsed:0))}`;
+  document.getElementById('play-icon').innerHTML = running
+    ? '<rect x="5" y="4" width="4" height="16" rx="1"/><rect x="15" y="4" width="4" height="16" rx="1"/>'
+    : '<path d="M6 4l14 8-14 8V4z"/>';
+}
+
+// ── TODAY PANEL ──
+function todaySessions() { return sessions.filter(s=>dateKey(s.start)===todayKey()); }
+
+function renderTodayPanel() {
+  const now = new Date();
+  document.getElementById('today-date').textContent =
+    now.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
+  const ts = todaySessions();
+  const total = ts.reduce((a,s)=>a+s.duration,0);
+  document.getElementById('today-total-num').textContent = fmtHM(total);
+  const c = document.getElementById('today-sessions');
+  if (!ts.length) { c.innerHTML='<div class="today-empty">No sessions yet today.<br>Start the timer to begin.</div>'; return; }
+  c.innerHTML = ts.map(s=>`
+    <div class="today-row" id="trow-${s.id}">
+      <div class="today-row-top">
+        <div class="today-subj" id="tsubj-${s.id}">${s.subject}</div>
+        <div class="today-dur">${fmtHM(s.duration)}</div>
+      </div>
+      <div class="today-time-label">${fmtTime(s.start)}</div>
+      <div class="today-actions">
+        <button class="t-btn edit" onclick="startTodayEdit(${s.id})">Edit</button>
+        <button class="t-btn del" onclick="deleteTodaySession(${s.id})">✕</button>
+      </div>
+    </div>`).join('');
+}
+
+function startTodayEdit(id) {
+  const s=sessions.find(x=>x.id===id); if(!s) return;
+  const row=document.getElementById(`trow-${id}`);
+  document.getElementById(`tsubj-${id}`).innerHTML=`<input class="today-subj-input" id="tedit-${id}" value="${s.subject}" onkeydown="if(event.key==='Enter')saveTodayEdit(${id})"/>`;
+  document.getElementById(`tedit-${id}`).focus();
+  row.classList.add('editing-row');
+  const btn=row.querySelector('.t-btn.edit');
+  btn.textContent='Save'; btn.className='t-btn save-t';
+  btn.setAttribute('onclick',`saveTodayEdit(${id})`);
+}
+function saveTodayEdit(id) {
+  const input=document.getElementById(`tedit-${id}`);
+  const val=input?input.value.trim():'';
+  const idx=sessions.findIndex(x=>x.id===id);
+  if(idx!==-1&&val) sessions[idx].subject=val;
+  save(); renderTodayPanel();
+}
+function deleteTodaySession(id) {
+  sessions=sessions.filter(x=>x.id!==id); save(); renderTodayPanel(); updateStats();
+}
+
+// ── STATS ──
+function updateStats() {
+  const now=Date.now();
+  const tS=sessions.filter(s=>dateKey(s.start)===todayKey()).reduce((a,s)=>a+s.duration,0);
+  const wS=sessions.filter(s=>now-s.start<7*86400000).reduce((a,s)=>a+s.duration,0);
+  const aS=sessions.reduce((a,s)=>a+s.duration,0);
+  document.getElementById('stat-today').innerHTML=statVal(tS);
+  document.getElementById('stat-week').innerHTML=statVal(wS);
+  document.getElementById('stat-total').innerHTML=statVal(aS);
+  document.getElementById('nav-total').textContent=fmtHM(aS);
+}
+
+// ── CHART ──
+function setRange(r,btn) {
+  chartRange=r;
+  document.querySelectorAll('.chart-tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active'); renderChart();
+}
+
+function renderChart() {
+  const wrap=document.getElementById('chart-wrap');
+
+  // Build buckets
+  let buckets=[];
+  const now=new Date();
+
+  if (chartRange==='week') {
+    // Last 7 days, one bar per day, label = Mon/Tue etc.
+    for (let i=6;i>=0;i--) {
+      const d=new Date(now); d.setDate(d.getDate()-i);
+      const key=dateKey(d.getTime());
+      const isToday=key===todayKey();
+      const label=d.toLocaleDateString('en-US',{weekday:'short'}).toUpperCase();
+      const secs=sessions.filter(s=>dateKey(s.start)===key).reduce((a,s)=>a+s.duration,0);
+      buckets.push({label,secs,isToday});
+    }
+  } else if (chartRange==='month') {
+    // Last 30 days, one bar per day, label every 5 days
+    for (let i=29;i>=0;i--) {
+      const d=new Date(now); d.setDate(d.getDate()-i);
+      const key=dateKey(d.getTime());
+      const isToday=key===todayKey();
+      const label=i%5===0||i===0 ? d.toLocaleDateString('en-US',{month:'short',day:'numeric'}) : '';
+      const secs=sessions.filter(s=>dateKey(s.start)===key).reduce((a,s)=>a+s.duration,0);
+      buckets.push({label,secs,isToday});
+    }
+  } else {
+    // All time: one bar per day (up to 90 days), or per week if longer
+    if (!sessions.length) { wrap.innerHTML='<div class="chart-empty">No sessions recorded yet</div>'; return; }
+    const oldest=Math.min(...sessions.map(s=>s.start));
+    const totalDays=Math.ceil((Date.now()-oldest)/86400000)+1;
+    if (totalDays<=60) {
+      for (let i=totalDays-1;i>=0;i--) {
+        const d=new Date(now); d.setDate(d.getDate()-i);
+        const key=dateKey(d.getTime());
+        const isToday=key===todayKey();
+        const label=i%7===0||i===0 ? d.toLocaleDateString('en-US',{month:'short',day:'numeric'}) : '';
+        const secs=sessions.filter(s=>dateKey(s.start)===key).reduce((a,s)=>a+s.duration,0);
+        buckets.push({label,secs,isToday});
+      }
+    } else {
+      const numWeeks=Math.ceil(totalDays/7);
+      for (let i=numWeeks-1;i>=0;i--) {
+        const wEnd=new Date(now); wEnd.setDate(wEnd.getDate()-i*7);
+        const wStart=new Date(wEnd); wStart.setDate(wStart.getDate()-6);
+        const label=wStart.toLocaleDateString('en-US',{month:'short',day:'numeric'});
+        const secs=sessions.filter(s=>s.start>=wStart.getTime()&&s.start<=wEnd.getTime()).reduce((a,s)=>a+s.duration,0);
+        buckets.push({label,secs,isToday:false});
+      }
+    }
+  }
+
+  if (!buckets.some(b=>b.secs>0)) { wrap.innerHTML='<div class="chart-empty">No sessions recorded yet</div>'; return; }
+
+  // Dimensions
+  const W=900, H=220;
+  const pL=56, pR=16, pT=36, pB=42;
+  const cW=W-pL-pR, cH=H;
+  const n=buckets.length;
+  const gap=cW/n;
+  const bw=Math.max(8, gap*(n<=7?0.58:n<=14?0.62:0.72));
+
+  // Y axis: nice ceiling in hours
+  const maxSecs=Math.max(...buckets.map(b=>b.secs),1);
+  const maxH=maxSecs/3600;
+  let yMax=Math.ceil(maxH); if(yMax<1) yMax=1;
+  // Choose tick interval
+  let tickInt=1;
+  if(yMax>20) tickInt=5;
+  else if(yMax>10) tickInt=2;
+  else if(yMax>6) tickInt=2;
+  const numTicks=Math.ceil(yMax/tickInt);
+  yMax=numTicks*tickInt; // snap to clean ceiling
+
+  let svg='';
+
+  // Y gridlines + labels
+  for(let i=0;i<=numTicks;i++) {
+    const val=i*tickInt;
+    const y=pT+cH-(val/yMax)*cH;
+    const lc=i===0?'#333':'#1d1d1d';
+    const lw=i===0?1.5:1;
+    svg+=`<line x1="${pL}" y1="${y.toFixed(1)}" x2="${pL+cW}" y2="${y.toFixed(1)}" stroke="${lc}" stroke-width="${lw}"/>`;
+    svg+=`<text x="${pL-8}" y="${(y+4.5).toFixed(1)}" text-anchor="end" fill="#777" font-family="'Cormorant Garamond',serif" font-size="13" font-weight="300">${val}h</text>`;
+  }
+
+  // Y axis title
+  const yMid=pT+cH/2;
+  svg+=`<text x="13" y="${yMid.toFixed(1)}" text-anchor="middle" fill="#555" font-family="'Josefin Sans',sans-serif" font-size="9" letter-spacing="2" transform="rotate(-90,13,${yMid.toFixed(1)})">HOURS</text>`;
+
+  // Bars
+  buckets.forEach((b,i)=>{
+    const barH=(b.secs/(yMax*3600))*cH;
+    const x=pL+i*gap+gap/2-bw/2;
+    const y=pT+cH-barH;
+    const cx=pL+i*gap+gap/2;
+    const origFill=b.isToday?'#c9a96e':'#7a5f30';
+    const hoverFill='#c9a96e';
+
+    if(barH>0) {
+      svg+=`<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${bw.toFixed(1)}" height="${Math.max(1,barH).toFixed(1)}" rx="2"
+        fill="${origFill}" class="cbar" data-o="${origFill}" data-h="${hoverFill}">
+        <title>${b.label||'Day'}: ${fmtHM(b.secs)}</title></rect>`;
+
+      // Bar-top numeric label
+      const hVal=b.secs/3600;
+      const topLbl=hVal<0.1?'<0.1':hVal%1===0?`${hVal}`:`${hVal.toFixed(1)}`;
+      svg+=`<text x="${cx.toFixed(1)}" y="${(y-7).toFixed(1)}" text-anchor="middle"
+        fill="#c9a96e" font-family="'Cormorant Garamond',serif" font-size="13" font-weight="400">${topLbl}h</text>`;
+    }
+
+    // X label
+    if(b.label) {
+      svg+=`<text x="${cx.toFixed(1)}" y="${(pT+cH+20).toFixed(1)}" text-anchor="middle"
+        fill="#777" font-family="'Josefin Sans',sans-serif" font-size="${n<=7?10:9}" letter-spacing="0.5">${b.label}</text>`;
+      if(b.isToday) {
+        svg+=`<text x="${cx.toFixed(1)}" y="${(pT+cH+32).toFixed(1)}" text-anchor="middle"
+          fill="#8a6e3e" font-family="'Josefin Sans',sans-serif" font-size="7" letter-spacing="1.5">TODAY</text>`;
+      }
+    }
+  });
+
+  const totalH=pT+cH+pB;
+  wrap.innerHTML=`<svg viewBox="0 0 ${W} ${totalH}" style="width:100%;height:auto;display:block">${svg}</svg>`;
+
+  wrap.querySelectorAll('.cbar').forEach(b=>{
+    b.addEventListener('mouseenter',()=>b.setAttribute('fill',b.dataset.h));
+    b.addEventListener('mouseleave',()=>b.setAttribute('fill',b.dataset.o));
+  });
+}
+
+// ── RECENT + TOP ──
+function renderRecent() {
+  const el=document.getElementById('recent-list');
+  const t5=sessions.slice(0,5);
+  if(!t5.length){el.innerHTML='<div class="no-sessions">No sessions yet</div>';return;}
+  el.innerHTML=t5.map(s=>`
+    <div class="session-row">
+      <div class="s-date">${fmtDate(s.start)}<br><span style="font-size:9px;opacity:.6">${fmtTime(s.start)}</span></div>
+      <div class="s-subject">${s.subject}</div>
+      <div class="s-dur">${fmtHM(s.duration)}</div><div></div>
+    </div>`).join('');
+}
+function renderTopSubjects() {
+  const el=document.getElementById('top-subjects');
+  const map={};
+  sessions.forEach(s=>{map[s.subject]=(map[s.subject]||0)+s.duration;});
+  const top=Object.entries(map).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  if(!top.length){el.innerHTML='<div class="no-sessions">No sessions yet</div>';return;}
+  el.innerHTML=top.map(([subj,secs])=>`
+    <div class="session-row">
+      <div class="s-subject" style="grid-column:span 2">${subj}</div>
+      <div class="s-dur">${fmtHM(secs)}</div><div></div>
+    </div>`).join('');
+}
+
+// ── SESSIONS PAGE ──
+function renderSessionsList() {
+  const el=document.getElementById('sessions-list');
+  document.getElementById('sessions-sub').textContent=`${sessions.length} session${sessions.length!==1?'s':''} recorded — click edit to annotate`;
+  if(!sessions.length){el.innerHTML='<div class="no-sessions">No sessions recorded yet.<br>Start the timer to begin tracking.</div>';return;}
+  el.innerHTML=sessions.map(s=>`
+    <div class="session-row" id="row-${s.id}">
+      <div class="s-date">${fmtDate(s.start)}<br><span style="font-size:9px;opacity:.6">${fmtTime(s.start)}</span></div>
+      <div class="s-subject" id="subj-${s.id}">${s.subject}</div>
+      <div class="s-dur">${fmtHM(s.duration)}</div>
+      <div class="s-actions">
+        <button class="s-btn edit" onclick="startEdit(${s.id})">Edit</button>
+        <button class="s-btn del" onclick="deleteSession(${s.id})">✕</button>
+      </div>
+    </div>`).join('');
+}
+function startEdit(id) {
+  const s=sessions.find(x=>x.id===id); if(!s) return;
+  const row=document.getElementById(`row-${id}`);
+  document.getElementById(`subj-${id}`).innerHTML=`<input class="s-subject-input" id="edit-${id}" value="${s.subject}" onkeydown="if(event.key==='Enter')saveEdit(${id})"/>`;
+  document.getElementById(`edit-${id}`).focus(); row.classList.add('editing');
+  const btn=row.querySelector('.s-btn.edit');
+  btn.textContent='Save'; btn.className='s-btn save-edit';
+  btn.setAttribute('onclick',`saveEdit(${id})`);
+}
+function saveEdit(id) {
+  const input=document.getElementById(`edit-${id}`);
+  const val=input?input.value.trim():'';
+  const idx=sessions.findIndex(x=>x.id===id);
+  if(idx!==-1&&val) sessions[idx].subject=val;
+  save(); renderSessionsList();
+}
+function deleteSession(id) { sessions=sessions.filter(x=>x.id!==id); save(); updateAll(); }
+
+// ── EXPORT/IMPORT ──
+function exportData() {
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([JSON.stringify(sessions,null,2)],{type:'application/json'}));
+  a.download='studium-backup.json'; a.click();
+}
+function importData(e) {
+  const file=e.target.files[0]; if(!file) return;
+  const r=new FileReader();
+  r.onload=ev=>{ try{ const imp=JSON.parse(ev.target.result); if(Array.isArray(imp)){sessions=imp;save();updateAll();alert(`Imported ${imp.length} sessions.`);} }catch{alert('Invalid file.');} };
+  r.readAsText(file); e.target.value='';
+}
+
+// ── PAGE SWITCHING ──
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById(`page-${name}`).classList.add('active');
+  document.querySelectorAll('.nav-tab').forEach(t=>{ if(t.textContent.toLowerCase()===name) t.classList.add('active'); });
+  if(name==='analytics'){ updateStats(); renderChart(); renderRecent(); renderTopSubjects(); }
+  if(name==='sessions') renderSessionsList();
+}
+function updateAll() { updateStats(); renderChart(); renderRecent(); renderTopSubjects(); renderSessionsList(); renderTodayPanel(); updateTimerUI(); }
+
+// ── INIT ──
+load(); updateTimerUI(); updateStats(); renderTodayPanel();
 </script>
 </body>
 </html>
